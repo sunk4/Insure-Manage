@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: InsureManage
+
+server:
+  servlet:
+    context-path: /api/v1
+
+springdoc:
+  default-produces-media-type: application/json
+
+
