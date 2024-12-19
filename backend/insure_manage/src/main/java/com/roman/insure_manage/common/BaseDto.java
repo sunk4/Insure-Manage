@@ -1,4 +1,4 @@
-package com.roman.insure_manage.dto;
+package com.roman.insure_manage.common;
 
 import lombok.Builder;
 import lombok.Getter;

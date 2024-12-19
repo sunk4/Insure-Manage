@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/insure_manage.iml" filepath="$PROJECT_DIR$/.idea/insure_manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Insure-Manage.iml" filepath="$PROJECT_DIR$/.idea/Insure-Manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/insure_manage/insure_manage.iml" filepath="$PROJECT_DIR$/backend/insure_manage/insure_manage.iml" />
     </modules>
   </component>
 </project>

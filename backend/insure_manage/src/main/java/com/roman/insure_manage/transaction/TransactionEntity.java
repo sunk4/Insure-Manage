@@ -1,12 +1,11 @@
-package com.roman.insure_manage.entity;
+package com.roman.insure_manage.transaction;
 
+
+import com.roman.insure_manage.common.BaseEntity;
+import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,19 +20,11 @@ import java.util.Date;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction extends BaseEntity {
+public class TransactionEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "policy_id")
-    @NotNull
-    private InsurancePolicy policy;
-
-    @NotNull
-    @FutureOrPresent
+    private InsurancePolicyEntity policy;
     private Date transactionDate;
-
-    @Positive
     private double amount;
-
-    @NotBlank
     private String transactionType;
 }

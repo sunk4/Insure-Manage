@@ -1,4 +1,4 @@
-package com.roman.insure_manage.entity;
+package com.roman.insure_manage.common;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
