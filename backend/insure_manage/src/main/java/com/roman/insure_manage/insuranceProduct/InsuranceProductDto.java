@@ -3,13 +3,12 @@ package com.roman.insure_manage.insuranceProduct;
 import com.roman.insure_manage.common.BaseDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class InsuranceProductDto extends BaseDto {
     @NotBlank
     @Size(max = 100)
