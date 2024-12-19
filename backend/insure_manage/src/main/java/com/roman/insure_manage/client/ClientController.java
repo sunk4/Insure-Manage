@@ -1,12 +1,10 @@
 package com.roman.insure_manage.client;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,19 +12,16 @@ import java.util.List;
 @RequestMapping("/client")
 @RequiredArgsConstructor
 public class ClientController {
-    private ClientService clientService;
+    private final ClientService clientService;
 
     @PostMapping
-    public ResponseEntity<Void> createClient(ClientDto clientDto) {
+    public ResponseEntity<Void> createClient(@Valid @RequestBody ClientDto clientDto) {
         clientService.createClient(clientDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<ClientDto>> getAllClients () {
+    public ResponseEntity<List<ClientDto>> getAllClients() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
 }

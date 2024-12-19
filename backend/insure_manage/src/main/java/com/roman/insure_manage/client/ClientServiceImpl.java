@@ -1,6 +1,7 @@
 package com.roman.insure_manage.client;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -8,16 +9,12 @@ import org.springframework.stereotype.Service;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+
+    private final ClientMapper clientMapper;
+
     @Override
     public void createClient (ClientDto clientDto) {
-        ClientEntity clientEntity = ClientEntity.builder()
-                .firstName(clientDto.getFirstName())
-                .lastName(clientDto.getLastName())
-                .dateOfBirth(clientDto.getDateOfBirth())
-                .email(clientDto.getEmail())
-                .phoneNumber(clientDto.getPhoneNumber())
-                .address(clientDto.getAddress())
-                .build();
+        ClientEntity clientEntity = clientMapper.clientDtoToClientEntity(clientDto);
         clientRepository.save(clientEntity);
 
     }
