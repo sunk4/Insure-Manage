@@ -17,7 +17,7 @@ public interface ClientMapper {
     List<ClientDto> clientEntityListToClientDtoList (List<ClientEntity> clientEntities);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    ClientEntity updateUserFromDto (
+    ClientEntity updateClientFromDto (
             ClientUpdateDto dto,
             @MappingTarget ClientEntity client
     );

@@ -42,7 +42,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void updateClient (UUID id, ClientUpdateDto clientDto) {
         ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Client not found"));
-        clientEntity = clientMapper.updateUserFromDto(clientDto, clientEntity);
+        clientEntity = clientMapper.updateClientFromDto(clientDto, clientEntity);
         clientRepository.save(clientEntity);
     }
 
