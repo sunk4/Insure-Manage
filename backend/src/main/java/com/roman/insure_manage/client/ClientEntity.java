@@ -21,6 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Table(name = "clients")
+@ToString
 public class ClientEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,9 +29,13 @@ public class ClientEntity  {
     private String firstName;
     private String lastName;
     private LocalDateTime dateOfBirth;
+    @Column(unique = true)
     private String email;
     private String phoneNumber;
     private String address;
+    private String city;
+    private String zipCode;
+    private String country;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<InsurancePolicyEntity> policies;
     @CreatedDate
