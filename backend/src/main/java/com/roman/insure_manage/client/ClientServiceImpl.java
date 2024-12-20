@@ -16,12 +16,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void createClient (ClientDto clientDto) {
-        try {
+
             ClientEntity clientEntity = clientMapper.clientDtoToClientEntity(clientDto);
             clientRepository.save(clientEntity);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Email already exists");
-        }
 
     }
 
