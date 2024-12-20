@@ -1,5 +1,6 @@
 package com.roman.insure_manage.client;
 
+import com.roman.insure_manage.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -48,6 +49,17 @@ public class ClientController {
     public ResponseEntity<Void> deleteClient(@PathVariable UUID id) {
         clientService.deleteClient(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/paginated")
+
+    public ResponseEntity<PageResponse<ClientDto>> getAllClientsPaginated (
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String filter
+    ) {
+        return ResponseEntity.ok(clientService.getAllClientsPaginated(page,
+                size, filter));
     }
 
 }
