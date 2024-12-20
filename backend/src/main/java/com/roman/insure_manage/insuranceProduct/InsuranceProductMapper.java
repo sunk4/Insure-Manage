@@ -1,6 +1,5 @@
 package com.roman.insure_manage.insuranceProduct;
 
-import com.roman.insure_manage.client.ClientDto;
 import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.client.ClientUpdateDto;
 import org.mapstruct.BeanMapping;
@@ -20,8 +19,9 @@ public interface InsuranceProductMapper {
   List<InsuranceProductDto> insuranceProductEntityListToInsuranceProductDtoList (List<InsuranceProductEntity> insuranceProductEntities);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    InsuranceProductServiceImpl updateInsuranceProductFromDto(
+    InsuranceProductEntity updateInsuranceProductFromDto(
             InsuranceProductUpdateDto dto,
             @MappingTarget InsuranceProductEntity insuranceProductEntity
     );
+
 }

@@ -14,6 +14,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class InsuranceProductController {
+
     private final InsuranceProductService insuranceProductService;
 
     @PostMapping

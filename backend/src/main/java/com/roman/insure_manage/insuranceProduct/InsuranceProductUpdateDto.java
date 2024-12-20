@@ -16,7 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 public class InsuranceProductUpdateDto {
-    private UUID id;
     @Size(max = 100)
     private String name;
     @Size(max = 500)
