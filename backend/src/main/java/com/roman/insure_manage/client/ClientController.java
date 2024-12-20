@@ -3,10 +3,10 @@ package com.roman.insure_manage.client;
 import com.roman.insure_manage.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ClientController {
     private final ClientService clientService;
-    private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
     @PostMapping
     public ResponseEntity<Void> createClient(@Valid @RequestBody ClientDto clientDto) {

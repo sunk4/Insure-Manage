@@ -2,10 +2,13 @@ package com.roman.insure_manage.client;
 
 import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
 import com.roman.insure_manage.util.EncryptionUtil;
+import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -58,6 +61,16 @@ public class ClientEntity  {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;
+
+    @CreatedBy
+    @ManyToOne
+    @JoinColumn(name = "created_by_worker_id")
+    private WorkerEntity createdBy;
+
+    @LastModifiedBy
+    @ManyToOne
+    @JoinColumn(name = "last_modified_by_worker_id")
+    private WorkerEntity lastModifiedBy;
 
     @PrePersist
     @PreUpdate
