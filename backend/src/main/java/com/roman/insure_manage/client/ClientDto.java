@@ -59,4 +59,6 @@ public class ClientDto {
     private List<InsurancePolicyDto> policies;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private UUID createdByWorkerId;
+    private UUID lastModifiedByWorkerId;
 }

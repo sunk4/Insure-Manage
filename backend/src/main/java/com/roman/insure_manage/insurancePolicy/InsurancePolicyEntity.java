@@ -2,13 +2,17 @@ package com.roman.insure_manage.insurancePolicy;
 
 import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
+import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -35,9 +39,9 @@ public class InsurancePolicyEntity {
     @JoinColumn(name = "product_id")
     private InsuranceProductEntity product;
 
-    private String startDate;
+    private LocalDate startDate;
 
-    private String endDate;
+    private LocalDate endDate;
 
     private double premiumAmount;
 
@@ -48,4 +52,16 @@ public class InsurancePolicyEntity {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;
+
+    @CreatedBy
+    @ManyToOne
+    @JoinColumn(name = "created_by_worker_id")
+    private WorkerEntity createdBy;
+
+    @LastModifiedBy
+    @ManyToOne
+    @JoinColumn(name = "last_modified_by_worker_id")
+    private WorkerEntity lastModifiedBy;
+
+
 }

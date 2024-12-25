@@ -34,4 +34,6 @@ public class InsuranceProductDto {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private UUID createdByWorkerId;
+    private UUID lastModifiedByWorkerId;
 }

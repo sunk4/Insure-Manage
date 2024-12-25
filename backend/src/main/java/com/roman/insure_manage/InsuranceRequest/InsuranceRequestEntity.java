@@ -1,6 +1,9 @@
-package com.roman.insure_manage.insuranceProduct;
+package com.roman.insure_manage.InsuranceRequest;
 
+import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
+import com.roman.insure_manage.insuranceProduct.CoverageType;
+import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +15,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -24,20 +28,25 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "insurance_products")
-public class InsuranceProductEntity  {
+@Table(name = "insurance_requests")
+public class InsuranceRequestEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private String description;
-    private BigDecimal basePrice;
 
-    @Enumerated(EnumType.STRING)
-    private CoverageType coverageType;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<InsurancePolicyEntity> policies;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private ClientEntity client;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private InsuranceProductEntity product;
+
+    private LocalDate requestDate;
+
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -54,5 +63,4 @@ public class InsuranceProductEntity  {
     @ManyToOne
     @JoinColumn(name = "last_modified_by_worker_id")
     private WorkerEntity lastModifiedBy;
-
 }
