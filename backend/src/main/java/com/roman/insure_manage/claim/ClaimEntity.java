@@ -1,9 +1,7 @@
-package com.roman.insure_manage.insurancePolicy;
+package com.roman.insure_manage.claim;
 
-import com.roman.insure_manage.claim.ClaimEntity;
-import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.common.StatusEnum;
-import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
+import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,33 +24,28 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "insurance_policies")
-public class InsurancePolicyEntity {
+@Table(name = "claims")
+public class ClaimEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "policy_id")
+    private InsurancePolicyEntity policy;
 
-    private ClientEntity client;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private InsuranceProductEntity product;
+    private LocalDate dateOfClaim;
 
-    @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ClaimEntity> claims;
 
-    private LocalDate startDate;
+    private double claimAmount;
 
-    private LocalDate endDate;
-
-    private double premiumAmount;
-    private Double propertyValue;
-    private int tripDuration;
-
+    @Enumerated(EnumType.STRING)
     private StatusEnum status;
+
+    private String description;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -70,6 +62,4 @@ public class InsurancePolicyEntity {
     @ManyToOne
     @JoinColumn(name = "last_modified_by_worker_id")
     private WorkerEntity lastModifiedBy;
-
-
 }
