@@ -1,14 +1,11 @@
 package com.roman.insure_manage.insuranceProduct;
 
-import jakarta.validation.constraints.NotBlank;
+import com.roman.insure_manage.common.CoverageType;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 
 @Getter
 @Setter

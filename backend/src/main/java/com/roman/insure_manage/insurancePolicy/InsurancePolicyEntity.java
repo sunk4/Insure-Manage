@@ -1,6 +1,7 @@
 package com.roman.insure_manage.insurancePolicy;
 
 import com.roman.insure_manage.client.ClientEntity;
+import com.roman.insure_manage.common.StatusEnum;
 import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
@@ -44,8 +45,10 @@ public class InsurancePolicyEntity {
     private LocalDate endDate;
 
     private double premiumAmount;
+    private Double propertyValue;
+    private int tripDuration;
 
-    private String status;
+    private StatusEnum status;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

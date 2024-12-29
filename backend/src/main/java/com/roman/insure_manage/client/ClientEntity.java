@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +43,7 @@ public class ClientEntity  {
 
 
     @Transient
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(unique = true)
     private String email;
@@ -108,7 +109,7 @@ public class ClientEntity  {
                 this.address = EncryptionUtil.decrypt(encryptedAddress);
             }
             if (encryptedDateOfBirth != null) {
-                this.dateOfBirth = LocalDateTime.parse(EncryptionUtil.decrypt(encryptedDateOfBirth));
+                this.dateOfBirth = LocalDate.parse(EncryptionUtil.decrypt(encryptedDateOfBirth));
             }
         } catch (Exception e) {
             throw new RuntimeException("Error decrypting fields", e);

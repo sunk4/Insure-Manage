@@ -30,7 +30,7 @@ public class ClientDto {
     @NotNull(message = "Date of birth is required")
     @Past(message = "Date of birth must be in the past")
 
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be a valid email address")

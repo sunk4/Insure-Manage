@@ -1,8 +1,6 @@
 package com.roman.insure_manage.InsuranceRequest;
 
 import com.roman.insure_manage.client.ClientEntity;
-import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
-import com.roman.insure_manage.insuranceProduct.CoverageType;
 import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
@@ -14,10 +12,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
