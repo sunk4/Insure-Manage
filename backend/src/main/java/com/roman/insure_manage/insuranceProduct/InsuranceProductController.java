@@ -38,10 +38,10 @@ public class InsuranceProductController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateInsuranceProduct (
             @PathVariable UUID id,
-            InsuranceProductUpdateDto insuranceProductEntity
+            @RequestBody InsuranceProductUpdateDto insuranceProductUpdateDto
     ) {
         insuranceProductService.updateInsuranceProduct(id,
-                insuranceProductEntity);
+                insuranceProductUpdateDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -49,9 +49,9 @@ public class InsuranceProductController {
     public ResponseEntity<PageResponse<InsuranceProductDto>> getAllInsuranceProductsPaginated (
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String filter
+            @RequestParam(required = false) String name
     ) {
         return ResponseEntity.ok(insuranceProductService.getAllInsuranceProductsPaginated(page,
-                size, filter));
+                size, name));
     }
 }

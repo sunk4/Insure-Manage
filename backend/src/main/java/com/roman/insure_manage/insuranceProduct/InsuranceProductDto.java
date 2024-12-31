@@ -2,12 +2,10 @@ package com.roman.insure_manage.insuranceProduct;
 
 import com.roman.insure_manage.common.CoverageType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,6 +15,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class InsuranceProductDto {
     private UUID id;
 
@@ -26,11 +25,11 @@ public class InsuranceProductDto {
     @NotBlank(message = "Description is required")
     @Size(max = 500)
     private String description;
-    @NotBlank(message = "Base price is required")
+    @NotNull(message = "Base price is required")
     @Positive(message = "Base price must be greater than 0")
     private double basePrice;
 
-    @NotBlank(message = "Coverage type is required")
+    @NotNull(message = "Coverage type is required")
     private CoverageType coverageType;
 
     private LocalDateTime createdAt;

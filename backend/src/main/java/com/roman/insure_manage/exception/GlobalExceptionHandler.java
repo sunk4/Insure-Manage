@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @RestControllerAdvice
@@ -19,12 +20,17 @@ public class GlobalExceptionHandler {
     private final LocalDateTime timestamp = LocalDateTime.now();
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException (MethodArgumentNotValidException e) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        List<String> errors = e.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> String.format("Field '%s': %s", fieldError.getField(), fieldError.getDefaultMessage()))
+                .toList();
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(
                         ErrorResponse.builder()
-                                .message(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage())
+                                .message("Validation failed for the request.")
+                                .details(errors)
                                 .code(HttpStatus.BAD_REQUEST.value())
                                 .timestamp(timestamp)
                                 .build()
@@ -32,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException (HttpRequestMethodNotSupportedException e) {
+    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(
@@ -45,7 +51,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMediaTypeException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMediaTypeException (HttpMediaTypeException e) {
+    public ResponseEntity<ErrorResponse> handleHttpMediaTypeException(HttpMediaTypeException e) {
         return ResponseEntity
                 .status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
                 .body(
@@ -58,7 +64,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotWritableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotWritableException (HttpMessageNotWritableException e) {
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotWritableException(HttpMessageNotWritableException e) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
@@ -71,20 +77,33 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException (HttpMessageNotReadableException e) {
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(
                         ErrorResponse.builder()
-                                .message(e.getMessage())
+                                .message("Invalid request payload. Please check the syntax and data format.")
                                 .code(HttpStatus.BAD_REQUEST.value())
                                 .timestamp(timestamp)
                                 .build()
                 );
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidIdException(IllegalArgumentException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(
+                        ErrorResponse.builder()
+                                .message(e.getMessage())
+                                .code(HttpStatus.NOT_FOUND.value())
+                                .timestamp(LocalDateTime.now())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleEntityNotFoundException (EntityNotFoundException e) {
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(
@@ -97,16 +116,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException (Exception e) {
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
                         ErrorResponse.builder()
-                                .message(e.getMessage())
+                                .message("An unexpected error occurred: " + e.getMessage())
                                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                                 .timestamp(timestamp)
                                 .build()
                 );
     }
-
 }

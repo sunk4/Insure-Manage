@@ -12,7 +12,7 @@ public interface InsuranceProductService {
 
     void deleteInsuranceProduct (UUID id);
 
-    void updateInsuranceProduct (UUID id, InsuranceProductUpdateDto insuranceProductEntity);
+    void updateInsuranceProduct (UUID id, InsuranceProductUpdateDto insuranceProductUpdateDto);
 
-    PageResponse<InsuranceProductDto> getAllInsuranceProductsPaginated (int page, int size, String filter);
+    PageResponse<InsuranceProductDto> getAllInsuranceProductsPaginated (int page, int size, String name);
 }

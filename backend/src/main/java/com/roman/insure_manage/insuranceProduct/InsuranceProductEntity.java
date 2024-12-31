@@ -30,6 +30,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Table(name = "insurance_products")
+@ToString
 public class InsuranceProductEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -43,7 +44,7 @@ public class InsuranceProductEntity  {
     @Size(max = 500)
     private String description;
 
-    @NotBlank(message = "Base price is required")
+    @NotNull(message = "Base price is required")
     @Positive(message = "Base price must be greater than 0")
     private double basePrice;
 

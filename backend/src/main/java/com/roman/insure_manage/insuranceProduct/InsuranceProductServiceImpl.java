@@ -41,22 +41,24 @@ public class InsuranceProductServiceImpl implements InsuranceProductService {
         InsuranceProductEntity insuranceProduct = insuranceProductRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Insurance product not found"));
         insuranceProduct =
                 insuranceProductMapper.updateInsuranceProductFromDto(insuranceProductUpdateDto, insuranceProduct);
+        System.out.println(insuranceProductUpdateDto.toString());
+        System.out.println(insuranceProduct.toString());
         insuranceProductRepository.save(insuranceProduct);
 
     }
 
     @Override
-    public PageResponse<InsuranceProductDto> getAllInsuranceProductsPaginated (int page, int size, String filter) {
+    public PageResponse<InsuranceProductDto> getAllInsuranceProductsPaginated (int page, int size, String name) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(
                 "createdAt").descending());
         Page<InsuranceProductEntity> insuranceProductEntities;
 
-        if (filter == null || filter.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             insuranceProductEntities = insuranceProductRepository.findAll(pageRequest);
         } else {
             insuranceProductEntities =
-                    insuranceProductRepository.findByName(
-                            filter, pageRequest);
+                    insuranceProductRepository.findByNameIgnoreCaseContaining(
+                            name, pageRequest);
 
         }
 
