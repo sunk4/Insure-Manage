@@ -4,4 +4,7 @@ public enum StatusEnum {
     Active,
     Inactive,
     Pending,
+    SUCCESS,
+    PENDING,
+    FAILED
 }

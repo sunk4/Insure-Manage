@@ -1,6 +1,7 @@
 package com.roman.insure_manage.client;
 
 import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
+import com.roman.insure_manage.transaction.TransactionEntity;
 import com.roman.insure_manage.util.EncryptionUtil;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
@@ -54,8 +55,12 @@ public class ClientEntity  {
     @Transient
     private String zipCode;
     private String country;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch =
+            FetchType.LAZY)
     private List<InsurancePolicyEntity> policies;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TransactionEntity> transactions;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
