@@ -5,6 +5,9 @@ import com.roman.insure_manage.transaction.TransactionEntity;
 import com.roman.insure_manage.util.EncryptionUtil;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
@@ -20,19 +23,24 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "clients")
 @Getter
 @Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "clients")
 @ToString
-public class ClientEntity  {
+public class ClientEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @NotBlank
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
     private String firstName;
+
     @Transient
     private String lastName;
 
@@ -42,28 +50,37 @@ public class ClientEntity  {
     private String encryptedAddress;
     private String encryptedZipCode;
 
-
     @Transient
     private LocalDate dateOfBirth;
 
     @Column(unique = true)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be a valid email address")
     private String email;
+
+    @NotBlank(message = "Phone number is required")
     private String phoneNumber;
+
     @Transient
     private String address;
+
     private String city;
+
     @Transient
     private String zipCode;
+
     private String country;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch =
-            FetchType.LAZY)
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<InsurancePolicyEntity> policies;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TransactionEntity> transactions;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;
@@ -82,7 +99,6 @@ public class ClientEntity  {
     @PreUpdate
     private void encryptFields() {
         try {
-
             if (dateOfBirth != null) {
                 this.encryptedDateOfBirth = EncryptionUtil.encrypt(dateOfBirth.toString());
             }
@@ -95,11 +111,13 @@ public class ClientEntity  {
             if (address != null) {
                 this.encryptedAddress = EncryptionUtil.encrypt(address);
             }
+            if (zipCode != null) {
+                this.encryptedZipCode = EncryptionUtil.encrypt(zipCode);
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error encrypting fields", e);
         }
     }
-
 
     @PostLoad
     private void decryptFields() {
@@ -115,6 +133,9 @@ public class ClientEntity  {
             }
             if (encryptedDateOfBirth != null) {
                 this.dateOfBirth = LocalDate.parse(EncryptionUtil.decrypt(encryptedDateOfBirth));
+            }
+            if (encryptedZipCode != null) {
+                this.zipCode = EncryptionUtil.decrypt(encryptedZipCode);
             }
         } catch (Exception e) {
             throw new RuntimeException("Error decrypting fields", e);

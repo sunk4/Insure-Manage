@@ -6,6 +6,9 @@ import com.roman.insure_manage.common.StatusEnum;
 import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
@@ -31,19 +34,33 @@ public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private ClientEntity client;
+
     @ManyToOne
     @JoinColumn(name = "policy_id")
+    @NotNull(message = "Policy ID is required")
     private InsurancePolicyEntity policy;
+
+    @NotNull(message = "Transaction date is required")
+    @FutureOrPresent(message = "Transaction date must be in the future or present")
     private LocalDate transactionDate;
+
+    @Positive(message = "Amount must be a positive number")
     private double amount;
+
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Status is required")
     private StatusEnum statusEnum;
+
+    private String note;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;

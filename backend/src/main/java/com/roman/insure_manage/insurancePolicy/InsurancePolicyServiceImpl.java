@@ -146,7 +146,6 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
             document.add(new Paragraph("Start Date: " + insurancePolicyEntity.getStartDate()));
             document.add(new Paragraph("End Date: " + insurancePolicyEntity.getEndDate()));
             document.add(new Paragraph("Premium Amount: " + insurancePolicyEntity.getPremiumAmount()));
-            document.add(new Paragraph("Status: " + insurancePolicyEntity.getStatus()));
             document.close();
             return pdfStream.toByteArray();
         } catch (DocumentException | IOException e) {

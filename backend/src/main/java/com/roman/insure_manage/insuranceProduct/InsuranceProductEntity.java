@@ -4,6 +4,10 @@ import com.roman.insure_manage.common.CoverageType;
 import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
@@ -30,21 +34,30 @@ public class InsuranceProductEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @NotBlank(message = "Name is required")
+    @Size(max = 100)
     private String name;
+
+    @NotBlank(message = "Description is required")
+    @Size(max = 500)
     private String description;
+
+    @NotBlank(message = "Base price is required")
+    @Positive(message = "Base price must be greater than 0")
     private double basePrice;
 
+    @NotNull(message = "Coverage type is required")
     @Enumerated(EnumType.STRING)
     private CoverageType coverageType;
-
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<InsurancePolicyEntity> policies;
 
-
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;

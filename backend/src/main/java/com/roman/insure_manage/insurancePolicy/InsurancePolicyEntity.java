@@ -7,6 +7,10 @@ import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
 import com.roman.insure_manage.transaction.TransactionEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
@@ -30,50 +34,38 @@ import java.util.UUID;
 @Builder
 @Table(name = "insurance_policies")
 public class InsurancePolicyEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", nullable = false)
+    @NotNull(message = "Client ID is required")
     private ClientEntity client;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
+    @NotNull(message = "Product ID is required")
     private InsuranceProductEntity product;
 
     @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TransactionEntity> transactions;
 
-
     @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClaimEntity> claims;
 
+    @NotNull(message = "Start date is required")
+    @FutureOrPresent(message = "Start date must be in the future or present")
     private LocalDate startDate;
 
+    @NotNull(message = "End date is required")
+    @FutureOrPresent(message = "End date must be in the future or present")
     private LocalDate endDate;
 
+    @Positive(message = "Premium amount must be a positive number")
     private double premiumAmount;
-    private Double propertyValue;
-    private int tripDuration;
-    @Enumerated(EnumType.STRING)
-    private StatusEnum status;
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    @Column(insertable = false)
-    private LocalDateTime updatedAt;
 
-    @CreatedBy
-    @ManyToOne
-    @JoinColumn(name = "created_by_worker_id")
-    private WorkerEntity createdBy;
-
-    @LastModifiedBy
-    @ManyToOne
-    @JoinColumn(name = "last_modified_by_worker_id")
-    private WorkerEntity lastModifiedBy;
 
 
 }

@@ -4,6 +4,7 @@ import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
@@ -31,21 +32,23 @@ public class InsuranceRequestEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @NotNull(message = "Client ID is required")
     private ClientEntity client;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @NotNull(message = "Product ID is required")
     private InsuranceProductEntity product;
 
+    @NotNull(message = "Request date is required")
     private LocalDate requestDate;
-
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime updatedAt;
