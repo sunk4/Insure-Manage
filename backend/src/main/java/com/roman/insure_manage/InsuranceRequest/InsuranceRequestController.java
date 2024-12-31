@@ -1,5 +1,6 @@
 package com.roman.insure_manage.InsuranceRequest;
 
+import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.common.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class InsuranceRequestController {
 
     @PostMapping
     public ResponseEntity<Void> createInsuranceRequest (@Valid @RequestBody InsuranceRequestDto insuranceRequestDto) {
+
         insuranceRequestService.createInsuranceRequest(insuranceRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

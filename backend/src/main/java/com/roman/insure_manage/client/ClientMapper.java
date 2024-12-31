@@ -1,17 +1,18 @@
 package com.roman.insure_manage.client;
 
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ClientMapper {
 
+    @Mapping(source = "createdByWorkerId", target = "createdBy.id")
+    @Mapping(source = "lastModifiedByWorkerId", target = "lastModifiedBy.id")
     ClientEntity clientDtoToClientEntity (ClientDto clientDto);
 
+    @Mapping(source = "createdBy.id", target = "createdByWorkerId")
+    @Mapping(source = "lastModifiedBy.id", target = "lastModifiedByWorkerId")
     ClientDto clientEntityToClientDto (ClientEntity clientEntity);
 
     List<ClientDto> clientEntityListToClientDtoList (List<ClientEntity> clientEntities);

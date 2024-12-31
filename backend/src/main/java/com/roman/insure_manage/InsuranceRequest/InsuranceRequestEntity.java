@@ -4,6 +4,7 @@ import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -26,6 +27,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Table(name = "insurance_requests")
+@ToString
 public class InsuranceRequestEntity {
 
     @Id
@@ -34,12 +36,12 @@ public class InsuranceRequestEntity {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    @NotNull(message = "Client ID is required")
+    @NotNull (message = "Client ID is required")
     private ClientEntity client;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    @NotNull(message = "Product ID is required")
+    @NotNull (message = "Product ID is required")
     private InsuranceProductEntity product;
 
     @NotNull(message = "Request date is required")

@@ -1,6 +1,11 @@
 package com.roman.insure_manage.InsuranceRequest;
 
+import com.roman.insure_manage.client.ClientEntity;
+import com.roman.insure_manage.client.ClientRepository;
 import com.roman.insure_manage.common.PageResponse;
+import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
+import com.roman.insure_manage.insuranceProduct.InsuranceProductRepository;
+import com.roman.insure_manage.insuranceProduct.InsuranceProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,12 +21,22 @@ import java.util.UUID;
 public class InsuranceRequestServiceImpl implements InsuranceRequestService {
 
     private final InsuranceRequestRepository insuranceRequestRepository;
+    private final ClientRepository clientRepository;
+    private final InsuranceProductRepository productRepository;
     private final InsuranceRequestMapper insuranceRequestMapper;
 
     @Override
     public void createInsuranceRequest (InsuranceRequestDto insuranceRequestDto) {
+        ClientEntity client =
+                clientRepository.findById(insuranceRequestDto.getClientId()).orElseThrow(()-> new IllegalArgumentException("Client not found"));
 
-        InsuranceRequestEntity insuranceRequestEntity = insuranceRequestMapper.insuranceRequestDtoToInsuranceRequestEntity(insuranceRequestDto);
+        InsuranceProductEntity insuranceProduct =
+                productRepository.findById(insuranceRequestDto.getProductId()).orElseThrow(()-> new IllegalArgumentException("Product not found"));
+
+                InsuranceRequestEntity insuranceRequestEntity = insuranceRequestMapper.insuranceRequestDtoToInsuranceRequestEntity(insuranceRequestDto);
+        insuranceRequestEntity.setClient(client);
+        insuranceRequestEntity.setProduct(insuranceProduct);
+
         insuranceRequestRepository.save(insuranceRequestEntity);
 
     }
