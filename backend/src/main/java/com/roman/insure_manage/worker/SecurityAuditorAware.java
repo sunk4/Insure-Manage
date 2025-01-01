@@ -1,5 +1,6 @@
 package com.roman.insure_manage.worker;
 
+import lombok.NonNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -16,6 +17,7 @@ public class SecurityAuditorAware implements AuditorAware<WorkerEntity> {
     }
 
     @Override
+    @NonNull
     public Optional<WorkerEntity> getCurrentAuditor () {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .filter(auth -> auth.getPrincipal() instanceof Jwt)

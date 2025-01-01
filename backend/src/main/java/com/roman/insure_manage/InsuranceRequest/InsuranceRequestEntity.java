@@ -4,10 +4,8 @@ import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
 import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -22,7 +20,6 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

@@ -18,7 +18,7 @@ public class ClaimUpdateDto {
     private UUID id;
     private UUID policyId;
     private LocalDate dateOfClaim;
-    private double claimAmount;
+    private Double claimAmount;
     private StatusEnum status;
     private String description;
 }

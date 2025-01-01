@@ -32,20 +32,10 @@ public class InsurancePolicyController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; " +
-                "filename=InsurancePolicy_" + id + ".pdf");
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; " + "filename=InsurancePolicy_" + id + ".pdf");
         headers.setContentLength(pdfBytes.length);
 
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePolicy (
-            @PathVariable UUID id,
-            @Valid @RequestBody InsurancePolicyUpdateDto insurancePolicyUpdateDto
-    ) {
-        insurancePolicyService.updatePolicy(id, insurancePolicyUpdateDto);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{id}")
@@ -55,8 +45,7 @@ public class InsurancePolicyController {
 
     @GetMapping("/paginated")
     public ResponseEntity<PageResponse<InsurancePolicyDto>> getAllInsurancePoliciesPaginated (
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(insurancePolicyService.getAllInsurancePoliciesPaginated(page, size));
     }
@@ -72,8 +61,7 @@ public class InsurancePolicyController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; " +
-                "filename=InsurancePolicy_" + id + ".pdf");
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; " + "filename=InsurancePolicy_" + id + ".pdf");
         headers.setContentLength(pdfBytes.length);
 
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);

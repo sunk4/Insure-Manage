@@ -11,7 +11,6 @@ import java.util.UUID;
         InsurancePolicyDto getQuote(InsurancePolicyDto insurancePolicyDto);
         double calculatePremium(InsurancePolicyDto insurancePolicyDto, InsuranceProductEntity insuranceProductEntity, ClientEntity clientEntity);
         UUID savePolicy(InsurancePolicyDto insurancePolicyDto);
-        void updatePolicy(UUID id, InsurancePolicyUpdateDto insurancePolicyUpdateDto);
         InsurancePolicyDto getPolicyById(UUID id);
         List<InsurancePolicyDto> getAllInsurancePolicies();
         PageResponse<InsurancePolicyDto> getAllInsurancePoliciesPaginated(int page, int size);

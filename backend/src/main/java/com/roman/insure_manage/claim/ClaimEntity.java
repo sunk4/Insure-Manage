@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,11 +22,11 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Table(name = "claims")
+@ToString
 public class ClaimEntity {
 
     @Id
@@ -42,7 +41,7 @@ public class ClaimEntity {
     private LocalDate dateOfClaim;
     @NotNull(message = "Claim amount is required")
     @Min(value = 0, message = "Claim amount must be greater than or equal to 0")
-    private double claimAmount;
+    private Double claimAmount;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status is required")
     private StatusEnum status;

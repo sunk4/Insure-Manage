@@ -1,6 +1,8 @@
 package com.roman.insure_manage.claim;
 
 import com.roman.insure_manage.common.PageResponse;
+import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
+import com.roman.insure_manage.insurancePolicy.InsurancePolicyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +17,14 @@ import java.util.UUID;
 public class ClaimServiceImpl implements ClaimService {
     private final ClaimRepository claimRepository;
     private final ClaimMapper claimMapper;
+    private final InsurancePolicyRepository insurancePolicyRepository;
 
     @Override
     public void createClaim (ClaimDto claimDto) {
+        InsurancePolicyEntity insurancePolicyEntity =
+                insurancePolicyRepository.findById(claimDto.getPolicyId()).orElseThrow(() -> new IllegalArgumentException("Policy not found"));
         ClaimEntity claimEntity = claimMapper.toEntity(claimDto);
+        claimEntity.setPolicy(insurancePolicyEntity);
         claimRepository.save(claimEntity);
     }
 
@@ -26,7 +32,10 @@ public class ClaimServiceImpl implements ClaimService {
     public void updateClaim (UUID id, ClaimUpdateDto claimUpdateDto) {
         ClaimEntity claimEntity =
                 claimRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Claim not found"));
-        claimMapper.updateClaimFromDto(claimUpdateDto, claimEntity);
+
+        claimEntity = claimMapper.updateClaimFromDto(claimUpdateDto,
+                claimEntity);
+
         claimRepository.save(claimEntity);
     }
 

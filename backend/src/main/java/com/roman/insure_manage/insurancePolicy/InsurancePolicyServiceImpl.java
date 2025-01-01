@@ -1,8 +1,8 @@
 package com.roman.insure_manage.insurancePolicy;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.roman.insure_manage.client.ClientEntity;
 import com.roman.insure_manage.client.ClientRepository;
@@ -30,6 +30,7 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
     private final InsuranceProductRepository insuranceProductRepository;
     private final ClientRepository clientRepository;
     private final InsurancePolicyMapper insurancePolicyMapper;
+
 
     @Override
     public InsurancePolicyDto getQuote (InsurancePolicyDto insurancePolicyDto) {
@@ -85,21 +86,20 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
 
     @Override
     public UUID savePolicy (InsurancePolicyDto insurancePolicyDto) {
+        InsuranceProductEntity insuranceProductEntity =
+                insuranceProductRepository.findById(insurancePolicyDto.getProductId()).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        ClientEntity clientEntity =
+                clientRepository.findById(insurancePolicyDto.getClientId()).orElseThrow(() -> new IllegalArgumentException("Client not found"));
+        double premium = calculatePremium(insurancePolicyDto, insuranceProductEntity, clientEntity);
         InsurancePolicyEntity insurancePolicyEntity = insurancePolicyMapper.insurancePolicyDtoToInsurancePolicyEntity(insurancePolicyDto);
+        insurancePolicyEntity.setClient(clientEntity);
+        insurancePolicyEntity.setProduct(insuranceProductEntity);
+        insurancePolicyEntity.setPremiumAmount(premium);
 
         insurancePolicyRepository.save(insurancePolicyEntity);
 
         return insurancePolicyEntity.getId();
-    }
-
-    @Override
-    public void updatePolicy (UUID id, InsurancePolicyUpdateDto insurancePolicyUpdateDto) {
-        InsurancePolicyEntity insurancePolicyEntity = insurancePolicyRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Policy not found"));
-
-        insurancePolicyEntity = insurancePolicyMapper.updateInsurancePolicyFromDto(insurancePolicyUpdateDto, insurancePolicyEntity);
-
-        insurancePolicyRepository.save(insurancePolicyEntity);
-
     }
 
     @Override
@@ -133,23 +133,57 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
     }
 
     @Override
-    public byte[] generatePdf (UUID id) {
-        InsurancePolicyEntity insurancePolicyEntity = insurancePolicyRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Policy not found"));
+    public byte[] generatePdf(UUID id) {
+        InsurancePolicyEntity insurancePolicyEntity = insurancePolicyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Policy not found"));
 
         try (ByteArrayOutputStream pdfStream = new ByteArrayOutputStream()) {
-            Document document = new Document();
+            Document document = new Document(PageSize.A4, 50, 50, 50, 50);
             PdfWriter.getInstance(document, pdfStream);
             document.open();
-            document.add(new Paragraph("Insurance Policy Contract"));
-            document.add(new Paragraph("Client ID: " + insurancePolicyEntity.getClient().getId()));
-            document.add(new Paragraph("Product ID: " + insurancePolicyEntity.getProduct().getId()));
-            document.add(new Paragraph("Start Date: " + insurancePolicyEntity.getStartDate()));
-            document.add(new Paragraph("End Date: " + insurancePolicyEntity.getEndDate()));
-            document.add(new Paragraph("Premium Amount: " + insurancePolicyEntity.getPremiumAmount()));
+
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Paragraph title = new Paragraph("Insurance Policy Contract", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20);
+            document.add(title);
+
+            Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+            Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+
+            PdfPTable table = new PdfPTable(2); // Two columns
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
+            table.setWidths(new int[]{1, 3});
+
+            table.addCell(new PdfPCell(new Phrase("Client ID:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getClient().getId().toString(), normalFont)));
+
+            table.addCell(new PdfPCell(new Phrase("Product ID:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getProduct().getId().toString(), normalFont)));
+
+            table.addCell(new PdfPCell(new Phrase("Start Date:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getStartDate().toString(), normalFont)));
+
+            table.addCell(new PdfPCell(new Phrase("End Date:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getEndDate().toString(), normalFont)));
+
+            table.addCell(new PdfPCell(new Phrase("Premium Amount:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(insurancePolicyEntity.getPremiumAmount()), normalFont)));
+
+            document.add(table);
+
+            Paragraph footer = new Paragraph("This document is a legally binding agreement between the insurer and the client.", normalFont);
+            footer.setSpacingBefore(30);
+            footer.setAlignment(Element.ALIGN_CENTER);
+            document.add(footer);
+
             document.close();
             return pdfStream.toByteArray();
         } catch (DocumentException | IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

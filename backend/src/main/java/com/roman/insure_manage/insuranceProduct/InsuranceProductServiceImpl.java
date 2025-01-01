@@ -41,8 +41,6 @@ public class InsuranceProductServiceImpl implements InsuranceProductService {
         InsuranceProductEntity insuranceProduct = insuranceProductRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Insurance product not found"));
         insuranceProduct =
                 insuranceProductMapper.updateInsuranceProductFromDto(insuranceProductUpdateDto, insuranceProduct);
-        System.out.println(insuranceProductUpdateDto.toString());
-        System.out.println(insuranceProduct.toString());
         insuranceProductRepository.save(insuranceProduct);
 
     }

@@ -1,10 +1,7 @@
 package com.roman.insure_manage.insurancePolicy;
 
-import com.roman.insure_manage.common.StatusEnum;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class InsurancePolicyDto {
     private UUID id;
 
@@ -22,15 +20,13 @@ public class InsurancePolicyDto {
     private UUID clientId;
     @NotNull(message = "Product ID is required")
     private UUID productId;
-    @NotBlank(message = "Start date is required")
+    @NotNull(message = "Start date is required")
     @FutureOrPresent(message = "Start date must be in the future or present")
     private LocalDate startDate;
-    @NotBlank(message = "End date is required")
+    @NotNull(message = "End date is required")
     @FutureOrPresent(message = "End date must be in the future or present")
     private LocalDate endDate;
-    @Positive(message = "Premium amount must be a positive number")
     private double premiumAmount;
-    private StatusEnum status;
     private Double propertyValue;
     private int tripDuration;
     private LocalDateTime createdAt;
