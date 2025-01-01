@@ -43,7 +43,7 @@ public class InsuranceProductEntity  {
 
     @NotNull(message = "Base price is required")
     @Positive(message = "Base price must be greater than 0")
-    private double basePrice;
+    private Double basePrice;
 
     @NotNull(message = "Coverage type is required")
     @Enumerated(EnumType.STRING)

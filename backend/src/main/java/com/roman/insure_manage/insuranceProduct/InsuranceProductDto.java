@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class InsuranceProductDto {
     private UUID id;
 
@@ -27,7 +27,7 @@ public class InsuranceProductDto {
     private String description;
     @NotNull(message = "Base price is required")
     @Positive(message = "Base price must be greater than 0")
-    private double basePrice;
+    private Double basePrice;
 
     @NotNull(message = "Coverage type is required")
     private CoverageType coverageType;

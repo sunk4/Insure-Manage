@@ -1,8 +1,6 @@
 package com.roman.insure_manage.InsuranceRequest;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class InsuranceRequestDto {
     private UUID id;
     @NotNull (message = "Client ID is required")
