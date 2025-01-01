@@ -27,7 +27,7 @@ public class TransactionDto {
     @FutureOrPresent(message = "Transaction date must be in the future or present")
     private LocalDate transactionDate;
     @Positive(message = "Amount must be a positive number")
-    private double amount;
+    private Double amount;
     @NotNull(message = "Status is required")
     private StatusEnum statusEnum;
     private String note;

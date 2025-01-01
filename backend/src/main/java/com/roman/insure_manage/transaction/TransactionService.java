@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TransactionService {
-    PageResponse<TransactionDto> getAllTransactionPaginated (int page, int size, UUID clientId, UUID productId);
+    PageResponse<TransactionDto> getAllTransactionPaginated (int page, int size, UUID clientId, UUID policyId);
 
     List<TransactionDto> getAllTransaction ();
 

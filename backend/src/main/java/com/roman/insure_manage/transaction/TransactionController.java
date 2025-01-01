@@ -27,9 +27,9 @@ public class TransactionController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateTransaction (
             @PathVariable UUID id,
-            TransactionUpdateDto transactionUpdateDto
+            @RequestBody TransactionUpdateDto transactionUpdateDto
     ) {
-        transactionService.updateTransactionById(id,transactionUpdateDto);
+        transactionService.updateTransactionById(id, transactionUpdateDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
@@ -47,13 +47,13 @@ public class TransactionController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) UUID clientId,
-            @RequestParam(required = false) UUID productId
+            @RequestParam(required = false) UUID policyId
 
     ) {
 
         PageResponse<TransactionDto> transactionDtos =
                 transactionService.getAllTransactionPaginated(page, size,
-                        clientId, productId);
+                        clientId, policyId);
 
         return ResponseEntity.ok(transactionDtos);
 

@@ -19,7 +19,7 @@ public class TransactionUpdateDto {
     private UUID policyId;
     private UUID clientId;
     private LocalDate transactionDate;
-    private double amount;
+    private Double amount;
     private String note;
     private StatusEnum statusEnum;
 }

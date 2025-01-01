@@ -46,7 +46,7 @@ public class TransactionEntity {
     private LocalDate transactionDate;
 
     @Positive(message = "Amount must be a positive number")
-    private double amount;
+    private Double amount;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status is required")

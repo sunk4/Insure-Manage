@@ -6,12 +6,15 @@ import java.util.UUID;
 
 public class TransactionSpecification {
 
-    public static Specification<TransactionEntity> hasClientId (UUID clientId) {
-        return (root, query, criteriaBuilder) ->clientId == null ? criteriaBuilder.conjunction() : criteriaBuilder.equal(root.get("clientId"), clientId);
+    public static Specification<TransactionEntity> hasClientId(UUID clientId) {
+        return (root, query, criteriaBuilder) -> clientId == null
+                ? criteriaBuilder.conjunction()
+                : criteriaBuilder.equal(root.get("client").get("id"), clientId);
     }
 
-    public static Specification<TransactionEntity> hasProductId (UUID productId) {
-        return (root, query, criteriaBuilder) -> productId == null ?
-                criteriaBuilder.conjunction() : criteriaBuilder.equal(root.get("productId"), productId);
+    public static Specification<TransactionEntity> hasPolicyId(UUID policyId) {
+        return (root, query, criteriaBuilder) -> policyId == null
+                ? criteriaBuilder.conjunction()
+                : criteriaBuilder.equal(root.get("policy").get("id"), policyId);
     }
 }

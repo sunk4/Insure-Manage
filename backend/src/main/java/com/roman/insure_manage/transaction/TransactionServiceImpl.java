@@ -1,6 +1,13 @@
 package com.roman.insure_manage.transaction;
 
+import com.nimbusds.jose.util.JSONObjectUtils;
+import com.roman.insure_manage.client.ClientEntity;
+import com.roman.insure_manage.client.ClientRepository;
 import com.roman.insure_manage.common.PageResponse;
+import com.roman.insure_manage.insurancePolicy.InsurancePolicyEntity;
+import com.roman.insure_manage.insurancePolicy.InsurancePolicyRepository;
+import com.roman.insure_manage.insuranceProduct.InsuranceProductEntity;
+import com.roman.insure_manage.insuranceProduct.InsuranceProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,16 +24,19 @@ import java.util.UUID;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final TransactionMapper transactionMapper;
+    private final ClientRepository clientRepository;
+    private final InsurancePolicyRepository policyRepository;
 
     @Override
-    public PageResponse<TransactionDto> getAllTransactionPaginated (int page, int size, UUID clientId, UUID productId) {
+    public PageResponse<TransactionDto> getAllTransactionPaginated (int page, int size, UUID clientId, UUID policyId) {
         PageRequest pageRequest = PageRequest.of(page,size, Sort.by(
                 "createdAt").descending());
 
       Specification<TransactionEntity>  spec
                 = Specification
                 .where(TransactionSpecification.hasClientId(clientId))
-                .and(TransactionSpecification.hasProductId(productId));
+                .and(TransactionSpecification.hasPolicyId(policyId));
+
 
       Page<TransactionEntity> transactionEntities =
               transactionRepository.findAll(spec,pageRequest);
@@ -63,8 +74,17 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void createTransaction (TransactionDto transactionDto) {
+        ClientEntity client  =
+                clientRepository.findById(transactionDto.getClientId()).orElseThrow(()-> new IllegalArgumentException("Client not found"));
+
+        InsurancePolicyEntity insurancePolicy =
+                policyRepository.findById(transactionDto.getPolicyId()).orElseThrow(()-> new IllegalArgumentException("Policy not found"));
+
         TransactionEntity transactionEntity =
                 transactionMapper.transactionDtoToTransactionEntity(transactionDto);
+
+        transactionEntity.setClient(client);
+        transactionEntity.setPolicy(insurancePolicy);
 
         transactionRepository.save(transactionEntity);
 
