@@ -26,6 +26,7 @@ public class InsuranceProductServiceImpl implements InsuranceProductService {
     @Override
     public List<InsuranceProductDto> getAllInsuranceProducts () {
         List<InsuranceProductEntity> insuranceProductEntities = insuranceProductRepository.findAll();
+
         return insuranceProductMapper.insuranceProductEntityListToInsuranceProductDtoList(insuranceProductEntities);
 
     }

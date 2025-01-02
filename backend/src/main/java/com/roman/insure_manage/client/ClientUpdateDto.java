@@ -6,13 +6,15 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Builder
 public class ClientUpdateDto {
+    private UUID id;
     @Size(max = 50, min = 2, message = "First name must be between 2 and 50 characters")
     private String firstName;
     @Size(max = 50, min = 2, message = "Last name must be between 2 and 50 characters")

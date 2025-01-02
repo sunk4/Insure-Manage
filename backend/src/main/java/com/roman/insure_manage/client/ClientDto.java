@@ -2,10 +2,7 @@ package com.roman.insure_manage.client;
 
 import com.roman.insure_manage.insurancePolicy.InsurancePolicyDto;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ClientDto {
     private UUID id;
 
