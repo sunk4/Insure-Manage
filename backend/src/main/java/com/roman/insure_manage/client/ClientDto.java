@@ -1,14 +1,14 @@
 package com.roman.insure_manage.client;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.roman.insure_manage.insurancePolicy.InsurancePolicyDto;
 import jakarta.validation.constraints.*;
-import lombok.*;
-import org.springframework.cglib.core.Local;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +16,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class ClientDto {
     private UUID id;
 

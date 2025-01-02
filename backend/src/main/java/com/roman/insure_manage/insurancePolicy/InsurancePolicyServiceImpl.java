@@ -31,7 +31,6 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
     private final ClientRepository clientRepository;
     private final InsurancePolicyMapper insurancePolicyMapper;
 
-
     @Override
     public InsurancePolicyDto getQuote (InsurancePolicyDto insurancePolicyDto) {
         InsuranceProductEntity insuranceProductEntity =
@@ -133,7 +132,7 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
     }
 
     @Override
-    public byte[] generatePdf(UUID id) {
+    public byte[] generatePdf (UUID id) {
         InsurancePolicyEntity insurancePolicyEntity = insurancePolicyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Policy not found"));
 
@@ -143,7 +142,7 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
             document.open();
 
             Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
-            Paragraph title = new Paragraph("Insurance Policy Contract", titleFont);
+            Paragraph title = new Paragraph("Insurance Contract", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20);
             document.add(title);
@@ -151,17 +150,36 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
             Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
             Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
-            PdfPTable table = new PdfPTable(2); // Two columns
+            Paragraph companyInfo = new Paragraph(
+                    "Insure manage\n" +
+                            "456 Imaginary Street\n" +
+                            "Bratislava, State 12345\n" +
+                            "Phone: +421 123 456 789\n" +
+                            "Name: " + insurancePolicyEntity.getCreatedBy().getFirstName() + " " +insurancePolicyEntity.getCreatedBy().getLastName() + "\n" +
+                            "Email: " + insurancePolicyEntity.getCreatedBy().getEmail() + "\n",
+                    normalFont);
+            companyInfo.setAlignment(Element.ALIGN_LEFT);
+            companyInfo.setSpacingAfter(20);
+            document.add(companyInfo);
+
+            PdfPTable table = new PdfPTable(2);
             table.setWidthPercentage(100);
             table.setSpacingBefore(10f);
             table.setSpacingAfter(10f);
             table.setWidths(new int[]{1, 3});
 
-            table.addCell(new PdfPCell(new Phrase("Client ID:", headerFont)));
-            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getClient().getId().toString(), normalFont)));
+            table.addCell(new PdfPCell(new Phrase("Client Name:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getClient().getFirstName() + " " +
+                    insurancePolicyEntity.getClient().getLastName(), normalFont)));
 
-            table.addCell(new PdfPCell(new Phrase("Product ID:", headerFont)));
-            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getProduct().getId().toString(), normalFont)));
+            table.addCell(new PdfPCell(new Phrase("Product Name:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getProduct().getName(), normalFont)));
+
+            table.addCell(new PdfPCell(new Phrase("Product Description:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getProduct().getDescription(), normalFont)));
+
+            table.addCell(new PdfPCell(new Phrase("Coverage Type:", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(String.valueOf(insurancePolicyEntity.getProduct().getCoverageType()), normalFont)));
 
             table.addCell(new PdfPCell(new Phrase("Start Date:", headerFont)));
             table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getStartDate().toString(), normalFont)));
@@ -169,21 +187,46 @@ public class InsurancePolicyServiceImpl implements InsurancePolicyService {
             table.addCell(new PdfPCell(new Phrase("End Date:", headerFont)));
             table.addCell(new PdfPCell(new Phrase(insurancePolicyEntity.getEndDate().toString(), normalFont)));
 
-            table.addCell(new PdfPCell(new Phrase("Premium Amount:", headerFont)));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(insurancePolicyEntity.getPremiumAmount()), normalFont)));
+            table.addCell(new PdfPCell(new Phrase("Price", headerFont)));
+            table.addCell(new PdfPCell(new Phrase(String.format("$%.2f", insurancePolicyEntity.getPremiumAmount()), normalFont)));
 
             document.add(table);
 
-            Paragraph footer = new Paragraph("This document is a legally binding agreement between the insurer and the client.", normalFont);
-            footer.setSpacingBefore(30);
-            footer.setAlignment(Element.ALIGN_CENTER);
-            document.add(footer);
+            Paragraph signatureSpacing = new Paragraph("\n\n");
+            document.add(signatureSpacing);
+
+            PdfPTable signatureTable = getPdfPTable(normalFont);
+
+            document.add(signatureTable);
+
+            Paragraph date = new Paragraph("Date: " + java.time.LocalDate.now(), normalFont);
+            date.setSpacingBefore(20);
+            date.setAlignment(Element.ALIGN_RIGHT);
+            document.add(date);
 
             document.close();
             return pdfStream.toByteArray();
         } catch (DocumentException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static PdfPTable getPdfPTable (Font normalFont) {
+        PdfPTable signatureTable = new PdfPTable(2);
+        signatureTable.setWidthPercentage(100);
+        signatureTable.setSpacingBefore(20f);
+
+        PdfPCell companySignature = new PdfPCell(new Phrase("Company Representative Signature:", normalFont));
+        companySignature.setBorder(Rectangle.NO_BORDER);
+        companySignature.setPaddingTop(30);
+
+        PdfPCell clientSignature = new PdfPCell(new Phrase("Client Signature:", normalFont));
+        clientSignature.setBorder(Rectangle.NO_BORDER);
+        clientSignature.setPaddingTop(30);
+
+        signatureTable.addCell(companySignature);
+        signatureTable.addCell(clientSignature);
+        return signatureTable;
     }
 
 }

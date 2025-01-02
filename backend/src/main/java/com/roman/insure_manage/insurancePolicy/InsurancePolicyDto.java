@@ -1,5 +1,8 @@
 package com.roman.insure_manage.insurancePolicy;
 
+import com.roman.insure_manage.client.ClientDto;
+import com.roman.insure_manage.insuranceProduct.InsuranceProductDto;
+import com.roman.insure_manage.worker.WorkerEntity;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,8 +21,10 @@ public class InsurancePolicyDto {
 
     @NotNull(message = "Client ID is required")
     private UUID clientId;
+    private ClientDto client;
     @NotNull(message = "Product ID is required")
     private UUID productId;
+    private InsuranceProductDto product;
     @NotNull(message = "Start date is required")
     @FutureOrPresent(message = "Start date must be in the future or present")
     private LocalDate startDate;
@@ -31,6 +36,7 @@ public class InsurancePolicyDto {
     private int tripDuration;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private WorkerEntity createdByWorker;
     private UUID createdByWorkerId;
     private UUID lastModifiedByWorkerId;
 }
